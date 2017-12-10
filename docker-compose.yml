@@ -1,4 +1,4 @@
-imagaiServer:
+objectDetectionServer:
   image: object-detection:1.0.0
   ports:
     - 8889:8888
