@@ -3,4 +3,10 @@ RUN apt-get update && \
     apt-get install -y git && \
     cd /notebooks && \
     git clone https://github.com/tensorflow/models.git && \
-    git clone https://github.com/joydeep-mitra/object-detection.git;
+    git clone https://github.com/joydeep-mitra/object-detection.git \
+    && cd models/research \
+    && protoc object_detection/protos/*.proto --python_out=. \
+    && python setup.py sdist \
+    && (cd slim && python setup.py sdist)
+
+ENV PYTHONPATH=/notebook/models/research:/notebook/models/research/slim:$PYTHONPATH
