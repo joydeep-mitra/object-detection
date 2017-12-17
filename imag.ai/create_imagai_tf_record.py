@@ -174,6 +174,35 @@ def dict_to_tf_example(data,
   }))
   return example
 
+def read_metadata(annotations_dir, example):
+  result = {}
+  obj = {}
+  bbox_path = os.path.join(annotations_dir, example + '.bboxes.tsv')
+  label_path = os.path.join(annotations_dir, example + '.bboxes.labels.tsv')
+  bbox_keys = ['xmin', 'ymin', 'xmax', 'ymax']
+  bbox = {}
+  with tf.gfile.GFile(bbox_path) as fid:
+    lines = fid.readlines()
+    for line in lines:
+        box_coords = line.strip().split()
+        for idx, key in enumerate(bbox_keys):
+            bbox[key] = box_coords[idx]
+
+  with tf.gfile.GFile(label_path) as fid:
+    lines = fid.readlines()
+    for line in lines:
+        label = line.strip().split(' ')[0]
+        obj['name'] = label
+
+  obj['bndbox'] = bbox
+  obj['difficult'] = '0'
+  objects = []
+  objects.append(obj)
+  result['filename'] = example + '.JPG'
+  result['object'] = objects
+
+  return result
+
 
 def create_tf_record(output_filename,
 		     category_index,
@@ -203,7 +232,8 @@ def create_tf_record(output_filename,
     #  xml_str = fid.read()
     #xml = etree.fromstring(xml_str)
     #data = dataset_util.recursive_parse_xml_to_dict(xml)['annotation']
-    data = dataset_util.read_metadata(annotations_dir, example)
+    #data = dataset_util.read_metadata(annotations_dir, example)
+    data = read_metadata(annotations_dir, example)
 
     tf_example = dict_to_tf_example(data, category_index, label_map_dict, image_dir)
     writer.write(tf_example.SerializeToString())
