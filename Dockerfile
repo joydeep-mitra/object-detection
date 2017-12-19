@@ -9,4 +9,4 @@ RUN apt-get update && \
     && python setup.py sdist \
     && (cd slim && python setup.py sdist)
 
-ENV PYTHONPATH=/notebook/models/research:/notebook/models/research/slim:$PYTHONPATH
+ENV PYTHONPATH=/notebooks/models/research:/notebooks/models/research/slim:$PYTHONPATH
