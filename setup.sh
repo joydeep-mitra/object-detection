@@ -14,4 +14,5 @@ apt-get install python-tk
 apt-get install wget
 
 wget -O models/research/object_detection/imagai_run/models/faster_rcnn.tar.gz http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet101_coco_2017_11_08.tar.gz
-tar -xzvf models/research/object_detection/imagai_run/models/faster_rcnn.tar.gz
+cd models/research/object_detection/imagai_run/models
+tar -xzvf faster_rcnn.tar.gz
